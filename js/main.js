@@ -68,5 +68,5 @@ for (var i = 0; i < grades.length; i++) {
 }
 
 const source =
-    '<p style="text-align: right; font-size:10pt">Source: <a href="https://your-covid-data-source-link.com">Your COVID Data Source</a></p>';
+    '<p style="text-align: right; font-size:10pt">Source: <a href="https://data.census.gov/table/ACSDP5Y2018.DP05?g=0100000US$050000&d=ACS%205-Year%20Estimates%20Data%20Profiles&hidePreview=true</a></p>';
 legend.innerHTML = labels.join('') + source;
