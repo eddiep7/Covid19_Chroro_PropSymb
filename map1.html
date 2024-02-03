@@ -98,8 +98,6 @@
             let response = await fetch('assets/us-covid-2020-counts.geojson');
             let covidData = await response.json();
 
-            console.log(covidData); // Add this line for debugging
-
             map.on('load', function loadingData() {
                 map.addSource('covidData', {
                     type: 'geojson',
