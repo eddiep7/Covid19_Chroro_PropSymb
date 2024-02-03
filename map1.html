@@ -103,15 +103,15 @@
             let covidData = await response.json();
 
             map.on('load', function loadingData() {
-                map.addSource('covidData', {
+                map.addSource('county_rates', {
                     type: 'geojson',
-                    data: covidData
+                    data: county_rates
                 });
 
                 map.addLayer({
-                    'id': 'covidData-layer',
+                    'id': 'county_rates_layer',
                     'type': 'fill',
-                    'source': 'covidData',
+                    'source': 'county_rates',
                     'paint': {
                         'fill-color': [
                             'step',
@@ -152,7 +152,7 @@
                 ];
 
                 const legend = document.getElementById('legend');
-                legend.innerHTML = "<b>COVID-19 Rates<br>(cases per 100 people)</b><br><br>";
+                legend.innerHTML = "<b>Population Density<br>(cases per 100 people)</b><br><br>";
 
                 layers.forEach((layer, i) => {
                     const color = colors[i];
@@ -174,7 +174,7 @@
                     });
                     document.getElementById('text-description').innerHTML = region.length ?
                         `<h3>${region[0].properties.name}</h3><p><strong><em>${region[0].properties.rate}</strong> cases per 100 people</em></p>` :
-                        `<p>Hover over a region!</p>`;
+                        `<p>Hover over a state!</p>`;
                 });
             });
         }
