@@ -78,7 +78,7 @@
 <body>
     <div id="map"></div>
     <div class='map-overlay' id='features'>
-        <h2>US COVID-19 Counts (2020)</h2>
+        <h2>US COVID-19 Rates (2020)</h2>
         <div id='text-description'>
             <p>Hover over a region!</p>
         </div>
@@ -95,10 +95,8 @@
         });
 
         async function geojsonFetch() {
-            let response = await fetch('assets/us-covid-2020-counts.geojson');
+            let response = await fetch('assets/us-covid-2020-rates.geojson');
             let covidData = await response.json();
-
-            console.log(covidData); // Add this line for debugging
 
             map.on('load', function loadingData() {
                 map.addSource('covidData', {
@@ -113,7 +111,7 @@
                     'paint': {
                         'fill-color': [
                             'step',
-                            ['get', 'count'],
+                            ['get', 'rate'],
                             '#FFEDA0', 10,
                             '#FED976', 20,
                             '#FEB24C', 50,
@@ -150,7 +148,7 @@
                 ];
 
                 const legend = document.getElementById('legend');
-                legend.innerHTML = "<b>COVID-19 Counts<br>(number of cases)</b><br><br>";
+                legend.innerHTML = "<b>COVID-19 Rates<br>(cases per 100,000 people)</b><br><br>";
 
                 layers.forEach((layer, i) => {
                     const color = colors[i];
@@ -171,7 +169,7 @@
                         layers: ['covidData-layer']
                     });
                     document.getElementById('text-description').innerHTML = region.length ?
-                        `<h3>${region[0].properties.name}</h3><p><strong><em>${region[0].properties.count}</strong> cases</em></p>` :
+                        `<h3>${region[0].properties.name}</h3><p><strong><em>${region[0].properties.rate}</strong> cases per 100,000 people</em></p>` :
                         `<p>Hover over a region!</p>`;
                 });
             });
