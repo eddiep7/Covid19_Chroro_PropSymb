@@ -1,5 +1,4 @@
-mapboxgl.accessToken =
-    'pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw';
+mapboxgl.accessToken = 'pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw';
 let map = new mapboxgl.Map({
     container: 'map', // container ID
     style: 'mapbox://styles/mapbox/dark-v10',
@@ -7,64 +6,59 @@ let map = new mapboxgl.Map({
     minZoom: 4, // minimum zoom level of the map
     center: [138, 38] // starting center
 });
+
 const grades = [4, 5, 6],
     colors = ['rgb(208,209,230)', 'rgb(103,169,207)', 'rgb(1,108,89)'],
     radii = [5, 15, 20];
-//load data to the map as new layers.
-//map.on('load', function loadingData() {
-map.on('load', () => { //simplifying the function statement: arrow with brackets to define a function
-    // when loading a geojson, there are two steps
-    // add a source of the data and then add the layer out of the source
-    map.addSource('covid19', {
+
+map.on('load', () => {
+    map.addSource('covid-data', {
         type: 'geojson',
         data: 'assets/us-covid-2020-counts.geojson'
     });
+
     map.addLayer({
-            'id': 'covid19-point',
-            'type': 'circle',
-            'source': 'covid19',
-            'paint': {
-                // increase the radii of the circle as the zoom level and dbh value increases
-                'circle-radius': {
-                    'property': 'mag',
-                    'stops': [
-                        [grades[0], radii[0]],
-                        [grades[1], radii[1]],
-                        [grades[2], radii[2]]
-                    ]
-                },
-                'circle-color': {
-                    'property': 'mag',
-                    'stops': [
-                        [grades[0], colors[0]],
-                        [grades[1], colors[1]],
-                        [grades[2], colors[2]]
-                    ]
-                },
-                'circle-stroke-color': 'white',
-                'circle-stroke-width': 1,
-                'circle-opacity': 0.6
-            }
+        'id': 'covid-data-point',
+        'type': 'circle',
+        'source': 'covid-data',
+        'paint': {
+            'circle-radius': {
+                'property': 'your_property_for_radius', // Update with your property
+                'stops': [
+                    [grades[0], radii[0]],
+                    [grades[1], radii[1]],
+                    [grades[2], radii[2]]
+                ]
+            },
+            'circle-color': {
+                'property': 'your_property_for_color', // Update with your property
+                'stops': [
+                    [grades[0], colors[0]],
+                    [grades[1], colors[1]],
+                    [grades[2], colors[2]]
+                ]
+            },
+            'circle-stroke-color': 'white',
+            'circle-stroke-width': 1,
+            'circle-opacity': 0.6
         }
-    );
-    // click on tree to view magnitude in a popup
-    map.on('click', 'covid19-point', (event) => {
+    });
+
+    map.on('click', 'covid-data-point', (event) => {
+        // Update with your popup content
         new mapboxgl.Popup()
             .setLngLat(event.features[0].geometry.coordinates)
-            .setHTML(`<strong>Magnitude:</strong> ${event.features[0].properties.mag}`)
+            .setHTML(`<strong>Magnitude:</strong> ${event.features[0].properties.your_property}`)
             .addTo(map);
     });
 });
-// create legend
+
 const legend = document.getElementById('legend');
-//set up legend grades and labels
 var labels = ['<strong>Magnitude</strong>'],
     vbreak;
-//iterate through grades and create a scaled circle and label for each
+
 for (var i = 0; i < grades.length; i++) {
     vbreak = grades[i];
-    // you need to manually adjust the radius of each dot on the legend 
-    // in order to make sure the legend can be properly referred to the dot on the map.
     dot_radii = 2 * radii[i];
     labels.push(
         '<p class="break"><i class="dot" style="background:' + colors[i] + '; width: ' + dot_radii +
@@ -72,6 +66,7 @@ for (var i = 0; i < grades.length; i++) {
         dot_radii + 'px; "></i> <span class="dot-label" style="top: ' + dot_radii / 2 + 'px;">' + vbreak +
         '</span></p>');
 }
+
 const source =
-    '<p style="text-align: right; font-size:10pt">Source: <a href="https://data.census.gov/table/ACSDP5Y2018.DP05?g=0100000US$050000&d=ACS%205-Year%20Estimates%20Data%20Profiles&hidePreview=true">USGS</a></p>';
+    '<p style="text-align: right; font-size:10pt">Source: <a href="https://your-covid-data-source-link.com">Your COVID Data Source</a></p>';
 legend.innerHTML = labels.join('') + source;
