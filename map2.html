@@ -87,14 +87,14 @@
         map.on('load', () => {
             map.addSource('covid-data', {
                 type: 'geojson',
-                data: 'assets/us-covid-2020-counts.geojson'
+                data: 'us-covid-2020-counts.geojson' // corrected path
             });
 
             map.addLayer({
                 'id': 'covid-point',
                 'type': 'circle',
                 'source': 'covid-data',
-                'minzoom': 3,
+                // 'minzoom': 3, // removed minzoom
                 'paint': {
                     'circle-radius': {
                         'property': 'cases',
@@ -145,7 +145,6 @@
 
         legend.innerHTML = labels.join('') + source;
     </script>
-
 </body>
 
 </html>
