@@ -5,7 +5,9 @@
     <meta charset="utf-8">
     <title>Interactive Web Mapping</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.css" rel="stylesheet">
+
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.js"></script>
     <style>
         h2, h3 {
@@ -21,13 +23,14 @@
             margin: 10px;
         }
 
-        #map {
+        #map1{
             position: absolute;
             top: 0;
             bottom: 0;
             left: 0;
             right: 0;
             width: 100%;
+            height: 100%;
         }
 
         .map-overlay {
@@ -80,22 +83,23 @@
     <div class='map-overlay' id='features'>
         <h2>US COVID-19 Rates (2020)</h2>
         <div id='text-description'>
-            <p>Hover over a region!</p>
+            <p>Hover over a state!</p>
         </div>
     </div>
     <div class='map-overlay' id='legend'></div>
     <script>
-        mapboxgl.accessToken = 'pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw';
-
-        const map = new mapboxgl.Map({
-            container: 'map',
+        mapboxgl.accessToken = 
+        'pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw';
+        const map1 = new mapboxgl.Map({
+            container: 'map1',
             style: 'mapbox://styles/mapbox/light-v10',
-            zoom: 3,
+            zoom: 1,
             center: [-100, 40]
+            projection: 'albers'
         });
 
         async function geojsonFetch() {
-            let response = await fetch('assets/us-covid-2020-rates.geojson');
+            let response = await fetch('assets/us-covid-2020-rates.json');
             let covidData = await response.json();
 
             map.on('load', function loadingData() {
