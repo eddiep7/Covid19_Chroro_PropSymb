@@ -6,11 +6,16 @@
     <title>Interactive Web Mapping</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
 
+    <!-- Including the Mapbox GL CSS file -->
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.css" rel="stylesheet">
 
+    <!-- Including the Mapbox GL JS file -->
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.js"></script>
+
     <style>
-        h2, h3 {
+        /* CSS styles for heading and paragraphs */
+        h2,
+        h3 {
             margin: 10px;
             font-size: 18px;
         }
@@ -23,7 +28,10 @@
             margin: 10px;
         }
 
-        #map1{
+        /**
+        * Create a position for the map
+        * on the page */
+        #map1 {
             position: absolute;
             top: 0;
             bottom: 0;
@@ -33,7 +41,11 @@
             height: 100%;
         }
 
-        .map-overlay {
+        /**
+        * Set rules for how the map overlays
+        * (information box and legend) will be displayed
+         on the page. */
+        .map1-overlay {
             position: absolute;
             bottom: 0;
             left: 0;
@@ -79,80 +91,58 @@
 </head>
 
 <body>
-    <div id="map"></div>
-    <div class='map-overlay' id='features'>
-        <h2>US COVID-19 Rates (2020)</h2>
+    <div id="map1"></div>
+    <div class='map1-overlay' id='features'>
+        <h2>US population density</h2>
         <div id='text-description'>
             <p>Hover over a state!</p>
         </div>
     </div>
-    <div class='map-overlay' id='legend'></div>
+    <div class='map1-overlay' id='legend'></div>
     <script>
-        mapboxgl.accessToken = 
-        'pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw';
+        // initialize basemap
+        mapboxgl.accessToken =
+            'pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw';
         const map1 = new mapboxgl.Map({
-            container: 'map1',
-            style: 'mapbox://styles/mapbox/light-v10',
-            zoom: 1,
-            center: [-100, 40]
+            container: 'map1', // container ID
+            style: 'mapbox://styles/mapbox/light-v10', // style URL
+            zoom: 1, // starting zoom
+            center: [-100, 40], // starting center
             projection: 'albers'
         });
 
+        // load data and add as layer
         async function geojsonFetch() {
             let response = await fetch('assets/us-covid-2020-rates.json');
-            let covidData = await response.json();
+            let county_rates = await response.json();
 
-            map.on('load', function loadingData() {
-                map.addSource('county_rates', {
+            map1.on('load', function loadingData() {
+                map1.addSource('county_rates', {
                     type: 'geojson',
-                    data: county_rates
+                    data: county_rates,
                 });
 
-                map.addLayer({
+                map1.addLayer({
                     'id': 'county_rates_layer',
                     'type': 'fill',
                     'source': 'county_rates',
                     'paint': {
                         'fill-color': [
                             'step',
-                            ['get', 'rate'],
-                            '#FFEDA0', 0,
-                            '#FED976', 1,
-                            '#FEB24C', 2,
-                            '#FD8D3C', 5,
-                            '#FC4E2A', 10,
-                            '#E31A1C', 20,
-                            '#BD0026', 50,
-                            '#800026', 100
+                            ['get', 'cases'],
+                            '#FFEDA0', 10, '#FED976', 20, '#FEB24C', 50, '#FD8D3C', 100, '#FC4E2A', 200, '#E31A1C', 500, '#BD0026', 1000, '#800026'
                         ],
                         'fill-outline-color': '#BBBBBB',
                         'fill-opacity': 0.7,
                     }
                 });
 
-                const layers = [
-                    '0-1',
-                    '1-2',
-                    '2-5',
-                    '5-10',
-                    '10-20',
-                    '20-50',
-                    '50-100',
-                    '100 and more'
-                ];
-                const colors = [
-                    '#FFEDA070',
-                    '#FED97670',
-                    '#FEB24C70',
-                    '#FD8D3C70',
-                    '#FC4E2A70',
-                    '#E31A1C70',
-                    '#BD002670',
-                    '#80002670'
-                ];
+                const layers = ['0-9', '10-19', '20-49', '50-99', '100-199', '200-499', '500-999', '1000 and more'];
+                const colors = ['#FFEDA070', '#FED97670', '#FEB24C70', '#FD8D3C70', '#FC4E2A70', '#E31A1C70', '#BD002670', '#80002670'];
 
+                // create legend
                 const legend = document.getElementById('legend');
-                legend.innerHTML = "<b>Population Density<br>(cases per 100 people)</b><br><br>";
+                legend.innerHTML = "<b>Population Density<br>(people/sq.mi.)</b><br><br>";
 
                 layers.forEach((layer, i) => {
                     const color = colors[i];
@@ -167,18 +157,19 @@
                     item.appendChild(value);
                     legend.appendChild(item);
                 });
+            });
 
-                map.on('mousemove', ({ point }) => {
-                    const region = map.queryRenderedFeatures(point, {
-                        layers: ['covidData-layer']
-                    });
-                    document.getElementById('text-description').innerHTML = region.length ?
-                        `<h3>${region[0].properties.name}</h3><p><strong><em>${region[0].properties.rate}</strong> cases per 100 people</em></p>` :
-                        `<p>Hover over a state!</p>`;
+            map1.on('mousemove', ({ point }) => {
+                const state = map1.queryRenderedFeatures(point, {
+                    layers: ['county_rates_layer']
                 });
+                document.getElementById('text-description').innerHTML = state.length ?
+                    `<h3>${state[0].properties.county}</h3><p><strong><em>${state[0].properties.cases}</strong> people per square mile</em></p>` :
+                    `<p>Hover over a state!</p>`;
             });
         }
 
+        // Call the function to fetch GeoJSON data and load the map
         geojsonFetch();
     </script>
 </body>
