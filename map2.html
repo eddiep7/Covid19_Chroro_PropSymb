@@ -47,7 +47,7 @@
             display: inline-block;
             margin-top: 5px;
             border-radius: 50%;
-            opacity: 0.8;
+            opacity: 0.6;
         }
 
         .dot-label {
@@ -67,7 +67,8 @@
     <div id="map"></div>
     <div id="legend"></div>
     <script>
-        mapboxgl.accessToken = 'pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw';
+        mapboxgl.accessToken =
+            'pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw';
 
         // Set up Albers projection
         const albersProjection = d3.geoAlbersUsa();
@@ -86,7 +87,7 @@
         map.on('load', () => {
             map.addSource('covid-data', {
                 type: 'geojson',
-                data: 'assets/us-covid-2020-counts.json'
+                data: 'us-covid-2020-counts.json'
             });
 
             map.addLayer({
