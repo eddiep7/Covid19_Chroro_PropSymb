@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -21,7 +23,6 @@
             width: 100%;
         }
 
-        /* the layout of the legend panel */
         #legend {
             position: absolute;
             bottom: 0;
@@ -36,14 +37,12 @@
             font-family: 'Open Sans', sans-serif;
         }
 
-        /* each line for a break */
         .break {
             position: relative;
             margin: 0px;
             padding: 0px;
         }
 
-        /* basic style for a dot/circle */
         .dot {
             display: inline-block;
             margin-top: 5px;
@@ -51,7 +50,6 @@
             opacity: 0.6;
         }
 
-        /* the label for the dot */
         .dot-label {
             position: absolute;
             top: 0;
@@ -59,7 +57,6 @@
             font-style: italic;
         }
 
-        /* the text color of a hyper link */
         a {
             color: black
         }
@@ -72,19 +69,20 @@
     <script>
         mapboxgl.accessToken =
             'pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw';
+
+        // Set up Albers projection
+        const albersProjection = d3.geoAlbersUsa();
+
         let map = new mapboxgl.Map({
-            container: 'map', // container ID
+            container: 'map',
             style: 'mapbox://styles/mapbox/dark-v10',
-            zoom: 3, // starting zoom
-            minZoom: 3, // minimum zoom level of the map
-            center: [-98.5795, 39.8283] // starting center (approximate center of the US)
+            zoom: 1, // initial zoom
+            center: albersProjection([-98.5795, 39.8283]) // initial center using Albers projection
         });
 
         const caseCounts = [50000, 100000, 200000],
             colors = ['rgb(208,209,230)', 'rgb(103,169,207)', 'rgb(1,108,89)'],
             radii = [5, 15, 20];
-        
-        map.setProjection('albers');
 
         map.on('load', () => {
             map.addSource('covid-data', {
@@ -96,7 +94,6 @@
                 'id': 'covid-point',
                 'type': 'circle',
                 'source': 'covid-data',
-                // 'minzoom': 3, // removed minzoom
                 'paint': {
                     'circle-radius': {
                         'property': 'cases',
