@@ -75,8 +75,8 @@
             center: [-98.5795, 39.8283]
         });
 
-        const caseCounts = [5000, 50000, 500000],
-            colors = ['rgb(208,209,230)', 'rgb(103,169,207)', 'rgb(1,108,89)'],
+        const caseCounts = [5000, 50000, 200000],
+            colors = ['rgb(245, 245, 220)', 'rgb(255, 165, 0)', 'rgb(255, 0, 0)'], // Beige, Orange, Red
             radii = [2, 10, 15];
 
         map.on('load', () => {
@@ -136,8 +136,11 @@
 
         const source =
             '<p style="text-align: right; font-size:10pt">Source: <a href="link/to/your/source">Your Source</a></p>';
+        
+        const title = '<h3 style="margin-bottom: 5px;">COVID-19 Counts in the US (2020)</h3>';
+        const author = '<p>Author: Edward Park</p>';
 
-        legend.innerHTML = labels.join('') + source;
+        legend.innerHTML = title + labels.join('') + source + author;
     </script>
 </body>
 
