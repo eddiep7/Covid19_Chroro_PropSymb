@@ -95,7 +95,7 @@
     <div class='map1-overlay' id='features'>
         <h2>US population density</h2>
         <div id='text-description'>
-            <p>Hover over an area!</p>
+            <p>Hover over a state!</p>
         </div>
     </div>
     <div class='map1-overlay' id='legend'></div>
@@ -165,8 +165,7 @@
                 });
                 document.getElementById('text-description').innerHTML = state.length ?
                     `<h3>${state[0].properties.county}</h3>
-                    <p><strong>Cases:</strong> ${state[0].properties.cases}</p>
-                    <p><strong>People per square mile:</strong> ${state[0].properties.density.toFixed(2)}</p>` :
+                    <p><strong>Cases:</strong> ${state[0].properties.cases}</p>` :
                     `<p>Hover over an area!</p>`;
             });
         }
