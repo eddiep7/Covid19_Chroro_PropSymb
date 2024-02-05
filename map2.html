@@ -21,6 +21,24 @@
             width: 100%;
         }
 
+        #title {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1;
+            font-size: 20px;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        #author {
+            position: absolute;
+            top: 40px;
+            left: 10px;
+            z-index: 1;
+            font-size: 14px;
+            font-family: 'Open Sans', sans-serif;
+        }
+
         #legend {
             position: absolute;
             bottom: 0;
@@ -62,6 +80,8 @@
 </head>
 
 <body>
+    <div id="title">COVID-19 Counts in the US (2020)</div>
+    <div id="author">Author: Edward Park</div>
     <div id="map"></div>
     <div id="legend"></div>
     <script>
@@ -136,11 +156,8 @@
 
         const source =
             '<p style="text-align: right; font-size:10pt">Source: <a href="link/to/your/source">Your Source</a></p>';
-        
-        const title = '<h3 style="margin-bottom: 5px;">COVID-19 Counts in the US (2020)</h3>';
-        const author = '<p>Author: Edward Park</p>';
 
-        legend.innerHTML = title + labels.join('') + source + author;
+        legend.innerHTML = labels.join('') + source;
     </script>
 </body>
 
