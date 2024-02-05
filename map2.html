@@ -80,9 +80,9 @@
             center: albersProjection([-98.5795, 39.8283]) // initial center using Albers projection
         });
 
-        const caseCounts = [10000, 50000, 200000, 500000],
-            colors = ['rgb(255, 204, 204)', 'rgb(255, 102, 102)', 'rgb(204, 0, 0)', 'rgb(153, 0, 0)'],
-            radii = [5, 15, 20, 30];
+        const caseCounts = [10000, 100000, 500000],
+            colors = ['rgb(208,209,230)', 'rgb(103,169,207)', 'rgb(1,108,89)'],
+            radii = [5, 15, 20];
 
         map.on('load', () => {
             map.addSource('covid-data', {
@@ -100,8 +100,7 @@
                         'stops': [
                             [caseCounts[0], radii[0]],
                             [caseCounts[1], radii[1]],
-                            [caseCounts[2], radii[2]],
-                            [caseCounts[3], radii[3]]
+                            [caseCounts[2], radii[2]]
                         ]
                     },
                     'circle-color': {
@@ -109,8 +108,7 @@
                         'stops': [
                             [caseCounts[0], colors[0]],
                             [caseCounts[1], colors[1]],
-                            [caseCounts[2], colors[2]],
-                            [caseCounts[3], colors[3]]
+                            [caseCounts[2], colors[2]]
                         ]
                     },
                     'circle-stroke-color': 'white',
