@@ -95,7 +95,7 @@
     <div class='map1-overlay' id='features'>
         <h2>US population density</h2>
         <div id='text-description'>
-            <p>Hover over a state!</p>
+            <p>Hover over an area!</p>
         </div>
     </div>
     <div class='map1-overlay' id='legend'></div>
@@ -110,6 +110,9 @@
             center: [-100, 40], // starting center
             projection: 'albers'
         });
+
+        // Popup variable to store the popup
+        let popup;
 
         // load data and add as layer
         async function geojsonFetch() {
@@ -157,16 +160,43 @@
                     item.appendChild(value);
                     legend.appendChild(item);
                 });
-            });
 
-            map1.on('mousemove', ({ point }) => {
-                const state = map1.queryRenderedFeatures(point, {
-                    layers: ['county_rates_layer']
+                // Add a popup on click
+                map1.on('click', 'county_rates_layer', function (e) {
+                    const county = e.features[0].properties.county;
+                    const cases = e.features[0].properties.cases;
+
+                    // Close existing popup
+                    if (popup) {
+                        popup.remove();
+                    }
+
+                    // Create a new popup
+                    popup = new mapboxgl.Popup()
+                        .setLngLat(e.lngLat)
+                        .setHTML(`<h3>${county}</h3><p><strong>Cases:</strong> ${cases}</p>`)
+                        .addTo(map1);
                 });
-                document.getElementById('text-description').innerHTML = state.length ?
-                    `<h3>${state[0].properties.county}</h3>
-                    <p><strong>Cases:</strong> ${state[0].properties.cases}</p>` :
-                    `<p>Hover over an area!</p>`;
+
+                // Change the cursor to a pointer when the mouse is over the layer.
+                map1.on('mouseenter', 'county_rates_layer', function () {
+                    map1.getCanvas().style.cursor = 'pointer';
+                });
+
+                // Change it back to a pointer when it leaves.
+                map1.on('mouseleave', 'county_rates_layer', function () {
+                    map1.getCanvas().style.cursor = '';
+                });
+
+                map1.on('mousemove', ({ point }) => {
+                    const state = map1.queryRenderedFeatures(point, {
+                        layers: ['county_rates_layer']
+                    });
+                    document.getElementById('text-description').innerHTML = state.length ?
+                        `<h3>${state[0].properties.county}</h3>
+                        <p><strong>Cases:</strong> ${state[0].properties.cases}</p>` :
+                        `<p>Hover over an area!</p>`;
+                });
             });
         }
 
