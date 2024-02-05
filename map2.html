@@ -83,11 +83,13 @@
         const caseCounts = [50000, 100000, 200000],
             colors = ['rgb(208,209,230)', 'rgb(103,169,207)', 'rgb(1,108,89)'],
             radii = [5, 15, 20];
+        
+        map.setProjection('albers');
 
         map.on('load', () => {
             map.addSource('covid-data', {
                 type: 'geojson',
-                data: 'us-covid-2020-counts.json' // corrected path
+                data: 'assets/us-covid-2020-counts.json'
             });
 
             map.addLayer({
