@@ -8,8 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.js"></script>
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -69,26 +67,22 @@
     <script>
         mapboxgl.accessToken =
             'pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw';
-
-        // Set up Albers projection
-        const albersProjection = d3.geoAlbersUsa();
-
         let map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/dark-v10',
-            zoom: 1, // initial zoom
-            center: albersProjection([-98.5795, 39.8283]) // initial center using Albers projection
+            zoom: 3,
+            minZoom: 3,
+            center: [-98.5795, 39.8283]
         });
 
-        // changed scale
-        const caseCounts = [10000, 100000, 500000],
+        const caseCounts = [5000, 50000, 500000],
             colors = ['rgb(208,209,230)', 'rgb(103,169,207)', 'rgb(1,108,89)'],
             radii = [5, 15, 20];
 
         map.on('load', () => {
             map.addSource('covid-data', {
                 type: 'geojson',
-                data: 'us-covid-2020-counts.json'
+                data: 'assets/us-covid-2020-counts.json'
             });
 
             map.addLayer({
