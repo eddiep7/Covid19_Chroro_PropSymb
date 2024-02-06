@@ -6,4 +6,4 @@ Map 1 is a Choropleth Map visualization that represents the number of Covid-19 c
 
 **Map 1 Link:** https://eddiep7.github.io/Covid19_Chroro_PropSymb/map1.html
 
-![Image 1 for Map 1](/img/Mappng)
+![Image 1 for Map 1](/img/Map1Pic1.png)
