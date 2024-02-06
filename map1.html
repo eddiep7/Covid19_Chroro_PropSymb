@@ -93,7 +93,7 @@
 <body>
     <div id="map1"></div>
     <div class='map1-overlay' id='features'>
-        <h2>US population density</h2>
+        <h2>US Covid-19 Cases 2020</h2>
         <div id='text-description'>
             <p>Hover over an area!</p>
         </div>
@@ -145,7 +145,7 @@
 
                 // create legend
                 const legend = document.getElementById('legend');
-                legend.innerHTML = "<b>Population Density<br>(people/sq.mi.)</b><br><br>";
+                legend.innerHTML = "<b>cases<br>(cases)</b><br><br>";
 
                 layers.forEach((layer, i) => {
                     const color = colors[i];
